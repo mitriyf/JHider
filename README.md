@@ -3,6 +3,7 @@
 This plugin hides or adds join, quit, death, unknown commands, and achievement messages.
 - $ Versions 1.7.1-1.21 are supported.
 - $ Has been tested on versions: 1.7.10, 1.8.8, 1.12.2, 1.16.5, 1.21
+- $ FAQ: [FAQ · mitriyf/JHider Wiki](https://github.com/mitriyf/JHider/wiki/FAQ)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/mitriyf/jhider/badge)](https://www.codefactor.io/repository/github/mitriyf/jhider)
 # 🛠️ Customize your messages
