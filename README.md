@@ -9,7 +9,6 @@ This plugin hides or adds join, quit, death, unknown commands, and achievement m
 You can improve messages for join, quit, death, unknown commands, and achievements.
 
 ![2025-07-25 22-53-26](https://github.com/user-attachments/assets/038e4bf0-8031-4521-9576-88651da93420)
-![2025-07-25 23-02-30](https://github.com/user-attachments/assets/3bc3a639-9665-4db8-8a34-4e33df34a09a)
 ![2025-07-25 23-16-26](https://github.com/user-attachments/assets/e90647c4-c5bd-4e68-b4f2-ead8521b5bed)
 ## 🛠️ Supported:
 ### 🔮 Support Hex (1.16+), MiniMessage (1.18+)
