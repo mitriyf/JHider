@@ -26,13 +26,17 @@ You can improve messages for join, quit, death, unknown commands, and achievemen
 - It will automatically disable features that your version does not support.
 
 <img width="587" height="39" alt="image" src="https://github.com/user-attachments/assets/b3982764-0fa1-4783-808d-64a2ed80a317" />
+
 ## ♾️ Functions:
+
 ### ⌨️Command (/jhider):
 - /jhider - Reload the plugin.
+
 ### ✨Actions:
 - Add messages, commands, logs, sounds, bossbars [1.9+], titles [1.8+], and actionbars [1.11+].
 
 <img width="1920" height="1017" alt="2025-07-25_23 34 11" src="https://github.com/user-attachments/assets/9bb4881f-e118-47b1-8ab2-842e5b46a825" />
+
 ### ⚙️Config:
 - Send actions to players using messages. (Hex support from 1.16+, MiniMessage support from 1.18+)
 - Settings for join, quit, death, unknown commands, and achievements
