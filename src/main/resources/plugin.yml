@@ -1,0 +1,10 @@
+name: JHider
+version: '1.0'
+main: ru.mitriyf.jhider.JHider
+author: Mitriyf
+api-version: 1.13
+folia-supported: true
+softdepend: [ PlaceholderAPI ]
+commands:
+  jhider:
+    description: Reload config

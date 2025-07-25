@@ -1,0 +1,81 @@
+###################################################################
+# JDevs                        v1.0                        JHider #
+# JHider                                                    JDevs #
+###################################################################
+
+# Control the messages.
+settings:
+  # Insert hex or minimessage.
+  # minimessage - for Paper, 1.18+.
+  # hex - It works starting from version 1.16.5, but if your server is lower than this version, do not change anything.
+  translate: hex
+  # Set true to make placeholders work in messages.
+  placeholderAPI: false
+  # Specify which worlds will be blocked for performing actions.
+  worlds:
+    # Specify the blocking type: NULL, WHITELIST, BLACKLIST
+    type: "null"
+    worlds:
+      - "thisIsBadWorldD1"
+      - "YesThlsIsbad"
+  command:
+    # Return the message about the unknown command.
+    # For Paper and forks - 1.12+ | For Spigot - 1.7-1.11 (or less?) | spigot.yml or this
+    unknown: true
+  player:
+    # Disable the default player's joining message.
+    join: true
+    # Disable the default player's exit message.
+    quit: true
+    # Disable the default player's death message.
+    death: true
+  # Specify which messages will work in this configuration.
+  messages:
+    # Specify true to allow the plugin to accept values from this config.
+    # To make this work correctly, you need to apply the settings in the "command" and "player" sections.
+    # Unknown command. From 1.7 (or less?)
+    unknown: false
+    # Join message.
+    join: false
+    # Quit message.
+    quit: false
+    # Death message.
+    death: false
+    # Achievement message.
+    achievement: false
+# Set up the message.
+# This will only work if you have selected the plugin configuration mode.
+messages:
+  # Actions:
+  # [actionbar] message - Send the actionbar with your message. For 1.11+
+  # [message] message - Send a message to the player.
+  # [broadcast] message - Send a message to all players.
+  # [log] message - Send a message to the console.
+  # [player] command - Run the command on behalf of the player.
+  # [console] command - Run the command on behalf of the console.
+  # [title] title;subtitle;fadeIn;stay;fadeOut - Send the title to the player. For 1.8+
+  # [sound] sound;volume;pitch - Perform a sound for the player.
+  # Search for sounds here: https://helpch.at/docs/$version$/org/bukkit/Sound.html
+  # // Replace $version$ with the version of your server, for example: https://helpch.at/docs/1.8.8/org/bukkit/Sound.html
+  # [bossbar] message;color;type;time;style;flag - Send a bossbar to a player with a message for a specific time. For 1.9+
+  # Types:
+  # stop - The bossbar will disappear after the time you specified in time (seconds)
+  # time - Bossbar will animate the time that is running out.
+  # Functions:
+  # %time% - Seconds left.
+  # You can find all the functions like color, style, and flag here: https://helpch.at/docs/$version$/org/bukkit/boss/BossBar.html
+  #
+  # Info:
+  # Messages sent to the console may not replace placeholders or perform certain actions above.
+  # Built-in functions:
+  # %player% - Get the player name.
+  unknown:
+    - "[message] Unknown command. Type &a/help &ffor help."
+  join:
+    - "[message] %player% is &ajoined!"
+  quit:
+    - "[log] %player% is quited..."
+  death:
+    - "[message] %player% is &cdead..."
+  achievement:
+    - "[message] %player% get a &aAchievement!"
