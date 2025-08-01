@@ -14,8 +14,10 @@ You can improve messages for join, quit, death, unknown commands, and achievemen
 ## 🛠️ Supported:
 ### 🔮 Support Hex (1.16+), MiniMessage (1.18+)
 ### 🌍 Languages:
-- EN (English)
-- In the future, any
+- EN (English).
+- RU (Russian).
+- DE (German).
+- Any.
 ### 🌐 Plugins:
 - **PlaceholderAPI** - Add placeholders to your messages.
 
@@ -41,6 +43,9 @@ You can improve messages for join, quit, death, unknown commands, and achievemen
 ### ⚙️Config:
 - Send actions to players using messages. (Hex support from 1.16+, MiniMessage support from 1.18+)
 - Settings for join, quit, death, unknown commands, and achievements
+
+### 📝Automatic configuration update.
+### ⚰️Fast death.
 
 ## 📝 Configurations:
 View them by navigating through the files using the following path: src\main\resources
