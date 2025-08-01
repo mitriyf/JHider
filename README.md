@@ -7,7 +7,7 @@ This plugin hides or adds join, quit, death, unknown commands, and achievement m
 
 [![CodeFactor](https://www.codefactor.io/repository/github/mitriyf/jhider/badge)](https://www.codefactor.io/repository/github/mitriyf/jhider)
 # 🛠️ Customize your messages
-You can improve messages for join, quit, death, unknown commands, and achievements.
+You can improve messages for join, quit, death, respawn, unknown commands, and achievements.
 
 ![2025-07-25 22-53-26](https://github.com/user-attachments/assets/038e4bf0-8031-4521-9576-88651da93420)
 ![2025-07-25 23-16-26](https://github.com/user-attachments/assets/e90647c4-c5bd-4e68-b4f2-ead8521b5bed)
