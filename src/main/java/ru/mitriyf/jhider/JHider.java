@@ -17,6 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Getter
 public final class JHider extends JavaPlugin {
     private final ThreadLocalRandom rnd = ThreadLocalRandom.current();
+    private final String configVersion = "1.1";
     private int version;
     private Values values;
     private Utils utils;
@@ -36,6 +37,7 @@ public final class JHider extends JavaPlugin {
         version = getVer();
         values = new Values(this);
         utils = new Utils(this);
+        values.checkUpdates();
         values.setup();
     }
 
@@ -54,7 +56,7 @@ public final class JHider extends JavaPlugin {
             }
             mgr.registerEvents(uPreCommand != null ? uPreCommand : uCommand, this);
         }
-        if (playerStatus == null && values.isJoin() | values.isQuit() | values.isDeath()) {
+        if (playerStatus == null && values.isJoin() | values.isQuit() | values.isDeath() | values.isMRespawn()) {
             playerStatus = new PlayerStatus(this);
             mgr.registerEvents(playerStatus, this);
         }

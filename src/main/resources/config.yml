@@ -1,7 +1,9 @@
 ###################################################################
-# JDevs                        v1.0                        JHider #
+# JDevs                        v1.1                        JHider #
 # JHider                                                    JDevs #
 ###################################################################
+
+version: 1.1
 
 # Control the messages.
 settings:
@@ -9,6 +11,11 @@ settings:
   # minimessage - for Paper, 1.18+.
   # hex - It works starting from version 1.16.5, but if your server is lower than this version, do not change anything.
   translate: hex
+  # You can find out the language code by clicking on the link below and looking at the In-Game section.
+  # https://minecraft.fandom.com/wiki/Language#Languages
+  # Set true to enable locales for messages.
+  # You can configure locales in the plugin folder where the locales. folder is located. You can create your own files.
+  locales: false
   # Set true to make placeholders work in messages.
   placeholderAPI: false
   # Specify which worlds will be blocked for performing actions.
@@ -27,8 +34,12 @@ settings:
     join: true
     # Disable the default player's exit message.
     quit: true
-    # Disable the default player's death message.
-    death: true
+    # Death settings.
+    deaths:
+      # Disable the default player's death message.
+      disabled: true
+      # Enable the fast death function.
+      fast: false
   # Specify which messages will work in this configuration.
   messages:
     # Specify true to allow the plugin to accept values from this config.
@@ -41,10 +52,13 @@ settings:
     quit: false
     # Death message.
     death: false
+    # Respawn message.
+    respawn: false
     # Achievement message.
     achievement: false
 # Set up the message.
 # This will only work if you have selected the plugin configuration mode.
+# If you have enabled locales, the messages below will be displayed by default if the language is not set.
 messages:
   # Actions:
   # [actionbar] message - Send the actionbar with your message. For 1.11+
@@ -52,11 +66,14 @@ messages:
   # [broadcast] message - Send a message to all players.
   # [log] message - Send a message to the console.
   # [player] command - Run the command on behalf of the player.
+  # [teleport] world;x;y;z;yaw;pitch;delay - Teleport the player to the specified coordinates. The delay is measured in ticks.
   # [console] command - Run the command on behalf of the console.
   # [title] title;subtitle;fadeIn;stay;fadeOut - Send the title to the player. For 1.8+
-  # [sound] sound;volume;pitch - Perform a sound for the player.
+  # [sound] sound;volume;pitch;delay - Perform a sound for the player. The delay is measured in ticks.
   # Search for sounds here: https://helpch.at/docs/$version$/org/bukkit/Sound.html
   # // Replace $version$ with the version of your server, for example: https://helpch.at/docs/1.8.8/org/bukkit/Sound.html
+  # [effect] type;duration;amplifier;delay - Give the effect to the player. The delay and duration is measured in ticks.
+  # Find the types of effects here: https://helpch.at/docs/$version$/org/bukkit/potion/PotionEffectType.html
   # [bossbar] message;color;type;time;style;flag - Send a bossbar to a player with a message for a specific time. For 1.9+
   # Types:
   # stop - The bossbar will disappear after the time you specified in time (seconds)
@@ -77,5 +94,7 @@ messages:
     - "[log] %player% is quited..."
   death:
     - "[message] %player% is &cdead..."
+  respawn:
+    - "[message] %player% has been &crespawned!"
   achievement:
     - "[message] %player% get a &aAchievement!"

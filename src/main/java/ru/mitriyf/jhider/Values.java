@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import ru.mitriyf.jhider.utils.actions.Action;
@@ -11,23 +12,33 @@ import ru.mitriyf.jhider.utils.actions.ActionType;
 import ru.mitriyf.jhider.utils.colors.CHex;
 import ru.mitriyf.jhider.utils.colors.CMiniMessage;
 import ru.mitriyf.jhider.utils.colors.Colorizer;
+import ru.mitriyf.jhider.utils.updater.Updater;
 import ru.mitriyf.jhider.utils.worlds.BlackList;
 import ru.mitriyf.jhider.utils.worlds.Null;
 import ru.mitriyf.jhider.utils.worlds.WhiteList;
 import ru.mitriyf.jhider.utils.worlds.World;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Getter
 public class Values {
-    private final Pattern action_pattern = Pattern.compile("\\[(\\w+)] ?(.*)");
     private final JHider plugin;
-    private boolean unknown, join, quit, death, placeholderAPI, mUnknown, mJoin, mQuit, mDeath, mAchievement;
-    private List<Action> help, aJoin, aAchievement, aQuit, aDeath;
+    private final Pattern action_pattern = Pattern.compile("\\[(\\w+)] ?(.*)");
+    private final Map<String, List<Action>> help = new HashMap<>();
+    private final Map<String, List<Action>> aJoin = new HashMap<>();
+    private final Map<String, List<Action>> aAchievement = new HashMap<>();
+    private final Map<String, List<Action>> aQuit = new HashMap<>();
+    private final Map<String, List<Action>> aDeath = new HashMap<>();
+    private final Map<String, List<Action>> aRespawn = new HashMap<>();
+    private final String[] lcs = new String[]{"de_DE", "en_US", "ru_RU"};
+    private boolean unknown, join, quit, death, fastDeath, placeholderAPI, locale, mUnknown, mJoin, mQuit, mDeath, mRespawn, mAchievement;
     private List<String> worlds;
     private Colorizer colorizer;
     private World world;
@@ -44,6 +55,22 @@ public class Values {
         plugin.registerEvents();
     }
 
+    public void checkUpdates() {
+        File cfg = new File(plugin.getDataFolder(), "config.yml");
+        YamlConfiguration yml = YamlConfiguration.loadConfiguration(cfg);
+        String ver = plugin.getConfigVersion();
+        if (yml.getString("version") == null || !yml.getString("version").contains(ver)) {
+            try {
+                yml.set("version", ver);
+                yml.save(cfg);
+                new Updater(plugin).update("config.yml", cfg);
+                plugin.getLogger().info("The config has been successfully updated to version " + ver);
+            } catch (IOException e) {
+                plugin.getLogger().warning("Update config is failed! Error: " + e);
+            }
+        }
+    }
+
     private void setupSettings() {
         ConfigurationSection settings = plugin.getConfig().getConfigurationSection("settings");
         String translate = settings.getString("translate").toLowerCase();
@@ -52,6 +79,7 @@ public class Values {
         } else {
             colorizer = new CHex();
         }
+        locale = settings.getBoolean("locales");
         placeholderAPI = settings.getBoolean("placeholderAPI");
         ConfigurationSection w = settings.getConfigurationSection("worlds");
         String wType = w.getString("type").toLowerCase();
@@ -80,30 +108,63 @@ public class Values {
         ConfigurationSection player = settings.getConfigurationSection("player");
         join = player.getBoolean("join");
         quit = player.getBoolean("quit");
-        death = player.getBoolean("death");
+        ConfigurationSection d = player.getConfigurationSection("deaths");
+        death = d.getBoolean("disabled");
+        fastDeath = d.getBoolean("fast");
         ConfigurationSection messages = settings.getConfigurationSection("messages");
         mAchievement = messages.getBoolean("achievement");
         mUnknown = messages.getBoolean("unknown");
         mJoin = messages.getBoolean("join");
         mQuit = messages.getBoolean("quit");
         mDeath = messages.getBoolean("death");
+        mRespawn = messages.getBoolean("respawn");
         if (!join && !quit && !death && !mAchievement && plugin.getPlayerStatus() != null) {
             HandlerList.unregisterAll(plugin.getPlayerStatus());
         }
     }
 
     private void setupMessages() {
-        ConfigurationSection messages = plugin.getConfig().getConfigurationSection("messages");
-        File file = plugin.getServer().getWorldContainer().getAbsoluteFile();
-        YamlConfiguration spigot = YamlConfiguration.loadConfiguration(new File(file, "spigot.yml"));
-        help = getActionList(Collections.singletonList(colorizer.colorize(spigot.getString("messages.unknown-command"))));
-        if (mUnknown) {
-            help = getActionList(messages.getStringList("unknown"));
+        clearMessages();
+        setupLocales();
+        if (!mUnknown) {
+            File file = plugin.getServer().getWorldContainer().getAbsoluteFile();
+            YamlConfiguration spigot = YamlConfiguration.loadConfiguration(new File(file, "spigot.yml"));
+            help.put("", getActionList(Collections.singletonList(colorizer.colorize(spigot.getString("messages.unknown-command")))));
         }
-        aAchievement = getActionList(messages.getStringList("achievement"));
-        aJoin = getActionList(messages.getStringList("join"));
-        aQuit = getActionList(messages.getStringList("quit"));
-        aDeath = getActionList(messages.getStringList("death"));
+    }
+
+    private void setupLocales() {
+        Map<String, FileConfiguration> locales = new HashMap<>();
+        locales.put("", plugin.getConfig());
+        if (locale) {
+            File file = new File(plugin.getDataFolder(), "locales");
+            if (!file.exists()) {
+                for (String s : lcs) {
+                    plugin.saveResource("locales/" + s + ".yml", false);
+                }
+            }
+            File[] dir = file.listFiles();
+            if (dir == null) {
+                plugin.getLogger().warning("Locales are empty.");
+            } else {
+                for (File f : dir) {
+                    String name = f.getName();
+                    locales.put(name.substring(0, name.indexOf(".")).toLowerCase(), YamlConfiguration.loadConfiguration(f));
+                }
+            }
+        }
+        for (Map.Entry<String, FileConfiguration> entry : locales.entrySet()) {
+            ConfigurationSection messages = entry.getValue().getConfigurationSection("messages");
+            String name = entry.getKey();
+            if (mUnknown) {
+                help.put(name, getActionList(messages.getStringList("unknown")));
+            }
+            aAchievement.put(name, getActionList(messages.getStringList("achievement")));
+            aJoin.put(name, getActionList(messages.getStringList("join")));
+            aQuit.put(name, getActionList(messages.getStringList("quit")));
+            aDeath.put(name, getActionList(messages.getStringList("death")));
+            aRespawn.put(name, getActionList(messages.getStringList("respawn")));
+        }
     }
 
     private Action fromString(String str) {
@@ -127,5 +188,14 @@ public class Values {
             actionListBuilder.add(fromString(actionString));
         }
         return actionListBuilder.build();
+    }
+
+    private void clearMessages() {
+        help.clear();
+        aJoin.clear();
+        aQuit.clear();
+        aDeath.clear();
+        aRespawn.clear();
+        aAchievement.clear();
     }
 }

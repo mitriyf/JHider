@@ -1,0 +1,39 @@
+messages:
+  # Aktionen:
+  # [actionbar] nachricht - Sendet die Actionbar mit deiner Nachricht. Für 1.11+
+  # [message] nachricht - Sendet eine Nachricht an den Spieler.
+  # [broadcast] nachricht - Sendet eine Nachricht an alle Spieler.
+  # [log] nachricht - Sendet eine Nachricht an die Konsole.
+  # [player] befehl - Führt den Befehl im Namen des Spielers aus.
+  # [teleport] welt;x;y;z;yaw;pitch;verzögerung - Teleportiert den Spieler zu den angegebenen Koordinaten. Die Verzögerung wird in Ticks gemessen.
+  # [console] befehl - Führt den Befehl im Namen der Konsole aus.
+  # [title] titel;untertitel;einblenden;verbleiben;ausblenden - Sendet den Titel an den Spieler. Für 1.8+
+  # [sound] sound;lautstärke;tonhöhe;verzögerung - Spielt einen Sound für den Spieler ab. Der Klang wird in Ticks gemessen.
+  # Suche nach Sounds hier: https://helpch.at/docs/$version$/org/bukkit/Sound.html
+  # // Ersetze $version$ mit der Version deines Servers, zum Beispiel: https://helpch.at/docs/1.8.8/org/bukkit/Sound.html
+  # [effect] typ;dauer;verstärker;verzögerung - Gibt dem Spieler den Effekt. Die Verzögerung und Dauer wird in Ticks gemessen.
+  # Die Arten von Effekten findest du hier: https://helpch.at/docs/$version$/org/bukkit/potion/PotionEffectType.html
+  # [bossbar] nachricht;farbe;typ;zeit;stil;flag - Sendet eine Bossbar an einen Spieler mit einer Nachricht für eine bestimmte Zeit. Für 1.9+
+  # Typen:
+  # stop - Die Bossbar verschwindet nach der angegebenen Zeit (in Sekunden)
+  # time - Die Bossbar animiert die verbleibende Zeit.
+  # Funktionen:
+  # %time% - Verbleibende Sekunden.
+  # Alle Funktionen wie Farbe, Stil und Flag findest du hier: https://helpch.at/docs/$version$/org/bukkit/boss/BossBar.html
+  #
+  # Info:
+  # Nachrichten, die an die Konsole gesendet werden, ersetzen möglicherweise keine Platzhalter oder führen bestimmte oben genannte Aktionen aus.
+  # Eingebaute Funktionen:
+  # %player% - Gibt den Spielernamen zurück.
+  unknown:
+    - "[message] Unbekannter Befehl. Gib /help &fein, um Hilfe zu erhalten."
+  join:
+    - "[message] %player% ist beigetreten!"
+  quit:
+    - "[log] %player% hat den Server verlassen..."
+  death:
+    - "[message] %player% ist gestorben..."
+  respawn:
+    - "[message] %player% wurde &cwiederbelebt!"
+  achievement:
+    - "[message] %player% hat eine Errungenschaft &ferlangt!"
