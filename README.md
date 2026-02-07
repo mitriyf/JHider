@@ -43,7 +43,7 @@ You can improve messages for firstjoin, join, quit, death, respawn, unknown comm
 - Send actions to players using messages. (Hex support from 1.16+, MiniMessage support from 1.18+)
 - Settings for firstjoin, join, quit, death, unknown commands, and achievements
 
-### 🔄ConfigUpdater, NotifyUpdater (only required or, optionally, release can be included in the configuration)
+### 🔄ConfigUpdater and NotifyUpdater (only required or, optionally, release can be included in the configuration)
 ### 📝Automatic configuration update.
 ### ⚰️Fast death.
 
