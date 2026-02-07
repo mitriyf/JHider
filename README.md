@@ -18,7 +18,7 @@ You can improve messages for firstjoin, join, quit, death, respawn, unknown comm
 - Any.
 ### 🌐 Plugins:
 - **PlaceholderAPI** - Add placeholders to your messages.
-- **JPirates** - Make messages only for those who are on the whitelist.
+- **JPirates** - Make messages only for those who are on the whitelist. (from v1.2)
 
 ![2025-07-25 23-22-56](https://github.com/user-attachments/assets/2bea243f-7fc1-4f9e-897c-9654311d3db1)
 ### 🔎 Checks:
