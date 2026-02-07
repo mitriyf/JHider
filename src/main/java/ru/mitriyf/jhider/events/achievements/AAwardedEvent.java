@@ -1,20 +1,20 @@
-package ru.mitriyf.jhider.listeners.achievements;
+package ru.mitriyf.jhider.events.achievements;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.Values;
 import ru.mitriyf.jhider.utils.Utils;
+import ru.mitriyf.jhider.values.Values;
 
 @SuppressWarnings("deprecation")
-public class AAwarded implements Listener {
+public class AAwardedEvent implements Listener {
     private final Values values;
     private final Utils utils;
 
-    public AAwarded(JHider plugin) {
-        this.values = plugin.getValues();
-        this.utils = plugin.getUtils();
+    public AAwardedEvent(JHider plugin) {
+        values = plugin.getValues();
+        utils = plugin.getUtils();
     }
 
     @EventHandler

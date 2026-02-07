@@ -1,9 +1,9 @@
 ###################################################################
-# JDevs                        v1.1                        JHider #
+# JDevs                        v1.2                        JHider #
 # JHider                                                    JDevs #
 ###################################################################
 
-version: 1.1
+version: 1.2
 
 # Control the messages.
 settings:
@@ -16,12 +16,27 @@ settings:
   # Set true to enable locales for messages.
   # You can configure locales in the plugin folder where the locales. folder is located. You can create your own files.
   locales: false
-  # Set true to make placeholders work in messages.
-  placeholderAPI: false
+  # Notification of updates.
+  updater:
+    # Is it enabled?
+    # Updates are checked when the plugin is enabled.
+    enabled: true
+    # Auto-update settings.
+    settings:
+      # Enable this to update only critical updates.
+      required: true
+      # Enable this feature to update the plugin with any new versions.
+      release: false
+  # Plugins that are supported.
+  supports:
+    # Set true to make placeholders work in messages. The PlaceholderAPI plugin is required.
+    placeholderAPI: false
+    # Set true to remove unnecessary messages. The JPirates plugin is required.
+    jPirates: false
   # Specify which worlds will be blocked for performing actions.
   worlds:
-    # Specify the blocking type: NULL, WHITELIST, BLACKLIST
-    type: "null"
+    # Specify the blocking type: WHITELIST, BLACKLIST
+    type: "BLACKLIST"
     worlds:
       - "thisIsBadWorldD1"
       - "YesThlsIsbad"
@@ -62,9 +77,13 @@ settings:
 messages:
   # Actions:
   # [actionbar] message - Send the actionbar with your message. For 1.11+
+  # [connect] server - Send a player to a specific BungeeCord server.
+  # WARNING: Requires BungeeMessaging. This is present on BungeeCord and WaterFall.
+  # On Velocity it might be disabled by default. Check your proxy config.
   # [message] message - Send a message to the player.
   # [broadcast] message - Send a message to all players.
   # [log] message - Send a message to the console.
+  # [delay] ticks - Make a delay between actions. In ticks. (20 ticks = 1 second)
   # [player] command - Run the command on behalf of the player.
   # [teleport] world;x;y;z;yaw;pitch;delay - Teleport the player to the specified coordinates. The delay is measured in ticks.
   # [console] command - Run the command on behalf of the console.
@@ -74,6 +93,8 @@ messages:
   # // Replace $version$ with the version of your server, for example: https://helpch.at/docs/1.8.8/org/bukkit/Sound.html
   # [effect] type;duration;amplifier;delay - Give the effect to the player. The delay and duration is measured in ticks.
   # Find the types of effects here: https://helpch.at/docs/$version$/org/bukkit/potion/PotionEffectType.html
+  # [explosion] power;setFire;breakBlocks;delay;addX;addY;addZ - Create an explosion. The delay is measured in ticks.
+  # setFire, breakBlocks - set to false or true. addX, addY, addZ - double values that are added to the player's explosion location.
   # [bossbar] message;color;type;time;style;flag - Send a bossbar to a player with a message for a specific time. For 1.9+
   # Types:
   # stop - The bossbar will disappear after the time you specified in time (seconds)
@@ -88,13 +109,15 @@ messages:
   # %player% - Get the player name.
   unknown:
     - "[message] Unknown command. Type &a/help &ffor help."
+  firstjoin:
+    - "[broadcast] %player% joined the server."
   join:
-    - "[message] %player% is &ajoined!"
+    - "[broadcast] %player% appeared on the horizon"
   quit:
-    - "[log] %player% is quited..."
+    - "[broadcast] %player% sailed beyond the horizon"
   death:
-    - "[message] %player% is &cdead..."
+    - "[broadcast] %player% is &cdead..."
   respawn:
-    - "[message] %player% has been &crespawned!"
+    - "[broadcast] %player% has been &crespawned!"
   achievement:
-    - "[message] %player% get a &aAchievement!"
+    - "[broadcast] %player% get a &aAchievement!"

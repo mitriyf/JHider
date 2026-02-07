@@ -1,19 +1,19 @@
-package ru.mitriyf.jhider.listeners.achievements;
+package ru.mitriyf.jhider.events.achievements;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.Values;
 import ru.mitriyf.jhider.utils.Utils;
+import ru.mitriyf.jhider.values.Values;
 
-public class ADone implements Listener {
+public class ADoneEvent implements Listener {
     private final Values values;
     private final Utils utils;
 
-    public ADone(JHider plugin) {
-        this.values = plugin.getValues();
-        this.utils = plugin.getUtils();
+    public ADoneEvent(JHider plugin) {
+        values = plugin.getValues();
+        utils = plugin.getUtils();
     }
 
     @EventHandler

@@ -1,23 +1,22 @@
-package ru.mitriyf.jhider.listeners.unknowns;
+package ru.mitriyf.jhider.events.unknowns;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.command.UnknownCommandEvent;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.Values;
 import ru.mitriyf.jhider.utils.Utils;
+import ru.mitriyf.jhider.values.Values;
 
-public class UCommand implements Listener {
+public class UnknownCommandEvent implements Listener {
     private final Utils utils;
     private final Values values;
 
-    public UCommand(JHider plugin) {
-        this.values = plugin.getValues();
-        this.utils = plugin.getUtils();
+    public UnknownCommandEvent(JHider plugin) {
+        values = plugin.getValues();
+        utils = plugin.getUtils();
     }
 
     @EventHandler
-    private void unknownCommand(UnknownCommandEvent e) {
+    private void unknownCommand(org.bukkit.event.command.UnknownCommandEvent e) {
         if (values.getWorld().check(e.getSender())) {
             return;
         }

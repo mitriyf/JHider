@@ -1,10 +1,10 @@
 name: JHider
-version: '1.1'
+version: '1.2'
 main: ru.mitriyf.jhider.JHider
 author: Mitriyf
 api-version: 1.13
 folia-supported: true
-softdepend: [ PlaceholderAPI ]
+softdepend: [ JPirates, PlaceholderAPI ]
 description: "The plugin configures spigot messages."
 commands:
   jhider:

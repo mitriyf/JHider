@@ -1,9 +1,10 @@
-package ru.mitriyf.jhider.utils.worlds;
+package ru.mitriyf.jhider.utils.worlds.impl;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.Values;
+import ru.mitriyf.jhider.utils.worlds.World;
+import ru.mitriyf.jhider.values.Values;
 
 public class WhiteList implements World {
     private final Values values;

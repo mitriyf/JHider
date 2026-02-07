@@ -1,21 +1,21 @@
-package ru.mitriyf.jhider.listeners.unknowns;
+package ru.mitriyf.jhider.events.unknowns;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.Values;
 import ru.mitriyf.jhider.utils.Utils;
+import ru.mitriyf.jhider.values.Values;
 
-public class UPreCommand implements Listener {
+public class UnknownPreCommandEvent implements Listener {
     private final JHider plugin;
     private final Utils utils;
     private final Values values;
 
-    public UPreCommand(JHider plugin) {
+    public UnknownPreCommandEvent(JHider plugin) {
         this.plugin = plugin;
-        this.values = plugin.getValues();
-        this.utils = plugin.getUtils();
+        values = plugin.getValues();
+        utils = plugin.getUtils();
     }
 
     @EventHandler

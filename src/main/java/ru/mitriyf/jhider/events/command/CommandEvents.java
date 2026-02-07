@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.listeners;
+package ru.mitriyf.jhider.events.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -6,13 +6,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.Values;
+import ru.mitriyf.jhider.values.Values;
 
-public class Command implements Listener {
+public class CommandEvents implements Listener {
     private final Values values;
 
-    public Command(JHider plugin) {
-        this.values = plugin.getValues();
+    public CommandEvents(JHider plugin) {
+        values = plugin.getValues();
     }
 
     @EventHandler
@@ -27,7 +27,7 @@ public class Command implements Listener {
 
     private void process(CommandSender sender, String command) {
         if (sender.isOp() && command.replace("/", "").equalsIgnoreCase("spigot reload")) {
-            values.setup();
+            values.setup(false);
         }
     }
 }
