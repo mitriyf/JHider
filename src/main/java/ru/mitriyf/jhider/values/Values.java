@@ -132,14 +132,14 @@ public class Values {
         worldsList = worldsSection.getString("type").equals("allowed") ? new AllowedWorlds(this) : new BlockedWorlds(this);
         List<String> worldsList = worldsSection.getStringList("worlds");
         for (String worldString : worldsList) {
-            if (worldString.isEmpty() || worldString.equals("no")) {
+            if (worldString.isEmpty()) {
                 continue;
             }
             try {
                 World world = plugin.getServer().getWorld(worldString);
                 worldList.add(world);
             } catch (Exception e) {
-                logger.info("The world plugin is not detected at startup " + worldString + " (world can load itself after a while): " + e);
+                logger.info("The world plugin is not detected at startup " + worldString + ": " + e);
             }
         }
     }
