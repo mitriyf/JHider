@@ -1,5 +1,5 @@
 name: JHider
-version: '1.2'
+version: '1.3'
 main: ru.mitriyf.jhider.JHider
 author: Mitriyf
 api-version: 1.13
