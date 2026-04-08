@@ -46,10 +46,10 @@ public class Values {
     private final String[] lcs = new String[]{"de_DE", "en_US", "ru_RU"};
     private final Map<String, List<Action>> aAchievement = new HashMap<>();
     private final Pattern action_pattern = Pattern.compile("\\[(\\w+)] ?(.*)");
+    private final Set<World> worldTypes = new HashSet<>();
     private boolean messageUnknown, messageJoin, messageQuit, messageDeath, messageRespawn, messageAchievement;
     private boolean miniMessage, unknown, join, quit, death, fastDeath, placeholderAPI, jPirates, locale;
     private boolean updaterEnabled = true, required = true, release = false;
-    private final Set<World> worldTypes = new HashSet<>();
     private ConfigurationSection settings;
     private FileConfiguration config;
     private Colorizer colorizer;

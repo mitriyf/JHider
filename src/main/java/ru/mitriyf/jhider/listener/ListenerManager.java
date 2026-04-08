@@ -35,41 +35,57 @@ public class ListenerManager {
     }
 
     public void setup() {
-        PluginManager mgr = plugin.getServer().getPluginManager();
+        PluginManager manager = plugin.getServer().getPluginManager();
+        setupServerListeners(manager);
+        setupBaseListeners(manager);
+        int version = plugin.getVersion();
+        setupAchievements(manager, version);
+        setupUnknownCommandListeners(manager, version);
+    }
+
+    private void setupServerListeners(PluginManager manager) {
         if (worldStatusListener == null) {
             worldStatusListener = new WorldStatusListener(values);
-            mgr.registerEvents(worldStatusListener, plugin);
+            manager.registerEvents(worldStatusListener, plugin);
         }
         if (commandListener == null) {
             commandListener = new CommandListener(plugin);
-            mgr.registerEvents(commandListener, plugin);
+            manager.registerEvents(commandListener, plugin);
         }
-        int version = plugin.getVersion();
-        if (unknownCommandListener == null && unknownPreCommandListener == null && values.isUnknown()) {
-            if (version >= 12) {
-                unknownCommandListener = new UnknownCommandListener(plugin);
-            } else {
-                unknownPreCommandListener = new UnknownPreCommandListener(plugin);
-            }
-            mgr.registerEvents(unknownPreCommandListener != null ? unknownPreCommandListener : unknownCommandListener, plugin);
-        }
+    }
+
+    private void setupBaseListeners(PluginManager manager) {
         if (values.isJoin() | values.isQuit() | values.isDeath() | values.isMessageRespawn()) {
             if (playerStatusListener == null) {
                 playerStatusListener = new PlayerStatusListener(plugin);
-                mgr.registerEvents(playerStatusListener, plugin);
+                manager.registerEvents(playerStatusListener, plugin);
             }
-            if (values.isJPirates() && jPiratesPassListener == null && mgr.getPlugin("JPirates") != null) {
+            if (values.isJPirates() && jPiratesPassListener == null && manager.getPlugin("JPirates") != null) {
                 jPiratesPassListener = new JPiratesPassListener(plugin);
-                mgr.registerEvents(jPiratesPassListener, plugin);
+                manager.registerEvents(jPiratesPassListener, plugin);
             }
         }
+    }
+
+    private void setupAchievements(PluginManager manager, int version) {
         if (achievementAwardedListener == null && advancementDoneListener == null && values.isMessageAchievement()) {
             if (version < 12) {
                 achievementAwardedListener = new AchievementAwardedListener(plugin);
             } else {
                 advancementDoneListener = new AdvancementDoneListener(plugin);
             }
-            mgr.registerEvents(achievementAwardedListener != null ? achievementAwardedListener : advancementDoneListener, plugin);
+            manager.registerEvents(achievementAwardedListener != null ? achievementAwardedListener : advancementDoneListener, plugin);
+        }
+    }
+
+    private void setupUnknownCommandListeners(PluginManager manager, int version) {
+        if (unknownCommandListener == null && unknownPreCommandListener == null && values.isUnknown()) {
+            if (version >= 12) {
+                unknownCommandListener = new UnknownCommandListener(plugin);
+            } else {
+                unknownPreCommandListener = new UnknownPreCommandListener(plugin);
+            }
+            manager.registerEvents(unknownPreCommandListener != null ? unknownPreCommandListener : unknownCommandListener, plugin);
         }
     }
 }
