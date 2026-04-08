@@ -15,11 +15,11 @@ public class WorldStatusListener implements Listener {
 
     @EventHandler
     public void onWorldLoad(WorldLoadEvent e) {
-        values.getWorldTypes().add(e.getWorld());
+        values.getWorldList().add(e.getWorld());
     }
 
     @EventHandler
     public void onWorldUnload(WorldUnloadEvent e) {
-        values.getWorldTypes().remove(e.getWorld());
+        values.getWorldList().remove(e.getWorld());
     }
 }

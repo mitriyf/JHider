@@ -46,14 +46,14 @@ public class Values {
     private final String[] lcs = new String[]{"de_DE", "en_US", "ru_RU"};
     private final Map<String, List<Action>> aAchievement = new HashMap<>();
     private final Pattern action_pattern = Pattern.compile("\\[(\\w+)] ?(.*)");
-    private final Set<World> worldTypes = new HashSet<>();
+    private final Set<World> worldList = new HashSet<>();
     private boolean messageUnknown, messageJoin, messageQuit, messageDeath, messageRespawn, messageAchievement;
     private boolean miniMessage, unknown, join, quit, death, fastDeath, placeholderAPI, jPirates, locale;
     private boolean updaterEnabled = true, required = true, release = false;
     private ConfigurationSection settings;
     private FileConfiguration config;
-    private Colorizer colorizer;
     private WorldsList worldsList;
+    private Colorizer colorizer;
 
     public Values(JHider plugin) {
         this.plugin = plugin;
@@ -137,7 +137,7 @@ public class Values {
             }
             try {
                 World world = plugin.getServer().getWorld(worldString);
-                worldTypes.add(world);
+                worldList.add(world);
             } catch (Exception e) {
                 logger.info("The world plugin is not detected at startup " + worldString + " (world can load itself after a while): " + e);
             }
@@ -274,6 +274,7 @@ public class Values {
         for (Map<String, List<Action>> map : Arrays.asList(help, aJoin, aQuit, aDeath, aRespawn, aFirstJoin, aAchievement)) {
             map.clear();
         }
+        worldList.clear();
     }
 
     public void delete(File f) {

@@ -13,6 +13,6 @@ public class AllowedWorlds implements WorldsList {
 
     @Override
     public boolean notContainsWorld(World world) {
-        return !values.getWorldTypes().contains(world);
+        return !values.getWorldList().contains(world);
     }
 }
