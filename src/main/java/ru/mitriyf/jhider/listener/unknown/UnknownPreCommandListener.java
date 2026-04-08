@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.events.unknowns;
+package ru.mitriyf.jhider.listener.unknown;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,12 +7,12 @@ import ru.mitriyf.jhider.JHider;
 import ru.mitriyf.jhider.utils.Utils;
 import ru.mitriyf.jhider.values.Values;
 
-public class UnknownPreCommandEvent implements Listener {
+public class UnknownPreCommandListener implements Listener {
     private final JHider plugin;
     private final Utils utils;
     private final Values values;
 
-    public UnknownPreCommandEvent(JHider plugin) {
+    public UnknownPreCommandListener(JHider plugin) {
         this.plugin = plugin;
         values = plugin.getValues();
         utils = plugin.getUtils();
@@ -20,7 +20,7 @@ public class UnknownPreCommandEvent implements Listener {
 
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
-        if (values.getWorld().check(e.getPlayer())) {
+        if (values.getWorldsList().notContainsWorld(e.getPlayer().getWorld())) {
             return;
         }
         String msg = e.getMessage();

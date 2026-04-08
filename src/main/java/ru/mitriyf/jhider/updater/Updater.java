@@ -1,9 +1,9 @@
-package ru.mitriyf.jhider.values.updater;
+package ru.mitriyf.jhider.updater;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import ru.mitriyf.jhider.JHider;
+import ru.mitriyf.jhider.updater.config.ConfigUpdater;
 import ru.mitriyf.jhider.values.Values;
-import ru.mitriyf.jhider.values.updater.config.ConfigUpdater;
 
 import java.io.File;
 import java.io.FileOutputStream;

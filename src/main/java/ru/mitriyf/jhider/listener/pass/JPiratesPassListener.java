@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.events.pass;
+package ru.mitriyf.jhider.listener.pass;
 
 import dev.jdevs.jPirates.api.events.JPiratesJoinEvent;
 import dev.jdevs.jPirates.api.events.JPiratesQuitEvent;
@@ -9,24 +9,24 @@ import ru.mitriyf.jhider.JHider;
 import ru.mitriyf.jhider.utils.Utils;
 import ru.mitriyf.jhider.values.Values;
 
-public class JPiratesPassEvents implements Listener {
+public class JPiratesPassListener implements Listener {
     private final JHider plugin;
     private final Values values;
     private final Utils utils;
 
-    public JPiratesPassEvents(JHider plugin) {
+    public JPiratesPassListener(JHider plugin) {
         this.plugin = plugin;
         values = plugin.getValues();
         utils = plugin.getUtils();
     }
 
     @EventHandler
-    public void onJoin(JPiratesJoinEvent e) {
+    public void onJPiratesJoin(JPiratesJoinEvent e) {
         Player player = plugin.getServer().getPlayer(e.getUsername());
-        if (!values.isJoin() || values.getWorld().check(player)) {
+        if (!values.isJoin() || values.getWorldsList().notContainsWorld(player.getWorld())) {
             return;
         }
-        if (values.isMJoin() && e.isInWhitelist()) {
+        if (values.isMessageJoin() && e.isInWhitelist()) {
             if (player.hasPlayedBefore()) {
                 utils.sendMessage(player, values.getAJoin());
             } else {
@@ -36,12 +36,12 @@ public class JPiratesPassEvents implements Listener {
     }
 
     @EventHandler
-    public void onQuit(JPiratesQuitEvent e) {
+    public void onJPiratesQuit(JPiratesQuitEvent e) {
         Player player = e.getPlayer();
-        if (!values.isQuit() || values.getWorld().check(player)) {
+        if (!values.isQuit() || values.getWorldsList().notContainsWorld(player.getWorld())) {
             return;
         }
-        if (values.isMQuit() && e.isInWhitelist()) {
+        if (values.isMessageQuit() && e.isInWhitelist()) {
             utils.sendMessage(player, values.getAQuit());
         }
     }

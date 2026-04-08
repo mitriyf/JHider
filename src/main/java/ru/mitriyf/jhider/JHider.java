@@ -2,7 +2,7 @@ package ru.mitriyf.jhider;
 
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-import ru.mitriyf.jhider.cmd.CJHider;
+import ru.mitriyf.jhider.command.JHiderCommand;
 import ru.mitriyf.jhider.utils.Utils;
 import ru.mitriyf.jhider.values.Values;
 
@@ -19,12 +19,12 @@ public final class JHider extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Support: https://vk.com/jdevs");
-        getVer();
+        tryGetServerVersion();
         values = new Values(this);
         utils = new Utils(this);
         utils.setup();
         values.setup(true);
-        getCommand("jhider").setExecutor(new CJHider(this));
+        getCommand("jhider").setExecutor(new JHiderCommand(this));
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
@@ -33,12 +33,20 @@ public final class JHider extends JavaPlugin {
         getLogger().info("To get support for the plugin, write to the discussion from where you got it or write here: https://vk.com/jdevs");
     }
 
-    private void getVer() {
-        String ver = getServer().getBukkitVersion().split("-")[0].split("\\.")[1];
-        if (ver.length() >= 2) {
-            version = Integer.parseInt(ver.substring(0, 2));
-        } else {
-            version = Integer.parseInt(ver);
+    private void tryGetServerVersion() {
+        try {
+            String[] serverVersion = getServer().getBukkitVersion().split("-")[0].split("\\.");
+            String subVersion = serverVersion[1];
+            if (Integer.parseInt(serverVersion[0]) > 1) {
+                version = 26;
+            } else if (subVersion.length() >= 2) {
+                version = Integer.parseInt(subVersion.substring(0, 2));
+            } else {
+                version = Integer.parseInt(subVersion);
+            }
+        } catch (Exception e) {
+            getLogger().info("Version check failed. Default set version 26. Error: " + e);
+            version = 26;
         }
     }
 }

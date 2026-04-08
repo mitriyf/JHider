@@ -1,0 +1,18 @@
+package ru.mitriyf.jhider.filter.world.impl;
+
+import org.bukkit.World;
+import ru.mitriyf.jhider.filter.world.WorldsList;
+import ru.mitriyf.jhider.values.Values;
+
+public class BlockedWorlds implements WorldsList {
+    private final Values values;
+
+    public BlockedWorlds(Values values) {
+        this.values = values;
+    }
+
+    @Override
+    public boolean notContainsWorld(World world) {
+        return values.getWorldTypes().contains(world);
+    }
+}

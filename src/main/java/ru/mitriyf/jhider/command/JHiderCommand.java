@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.cmd;
+package ru.mitriyf.jhider.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,11 +7,11 @@ import ru.mitriyf.jhider.JHider;
 import ru.mitriyf.jhider.utils.Utils;
 import ru.mitriyf.jhider.values.Values;
 
-public class CJHider implements CommandExecutor {
+public class JHiderCommand implements CommandExecutor {
     private final Values values;
     private final Utils utils;
 
-    public CJHider(JHider plugin) {
+    public JHiderCommand(JHider plugin) {
         values = plugin.getValues();
         utils = plugin.getUtils();
     }

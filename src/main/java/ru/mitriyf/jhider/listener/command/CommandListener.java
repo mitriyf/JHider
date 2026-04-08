@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.events.command;
+package ru.mitriyf.jhider.listener.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -8,20 +8,20 @@ import org.bukkit.event.server.ServerCommandEvent;
 import ru.mitriyf.jhider.JHider;
 import ru.mitriyf.jhider.values.Values;
 
-public class CommandEvents implements Listener {
+public class CommandListener implements Listener {
     private final Values values;
 
-    public CommandEvents(JHider plugin) {
+    public CommandListener(JHider plugin) {
         values = plugin.getValues();
     }
 
     @EventHandler
-    public void listenerCommand(PlayerCommandPreprocessEvent e) {
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e) {
         process(e.getPlayer(), e.getMessage());
     }
 
     @EventHandler
-    public void listenerCommand(ServerCommandEvent e) {
+    public void onServerCommand(ServerCommandEvent e) {
         process(e.getSender(), e.getCommand());
     }
 

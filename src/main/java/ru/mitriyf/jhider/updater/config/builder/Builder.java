@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.values.updater.config.builder;
+package ru.mitriyf.jhider.updater.config.builder;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

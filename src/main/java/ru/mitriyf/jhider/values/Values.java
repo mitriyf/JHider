@@ -3,21 +3,22 @@ package ru.mitriyf.jhider.values;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.events.Events;
+import ru.mitriyf.jhider.filter.world.WorldsList;
+import ru.mitriyf.jhider.filter.world.impl.AllowedWorlds;
+import ru.mitriyf.jhider.filter.world.impl.BlockedWorlds;
+import ru.mitriyf.jhider.listener.ListenerManager;
+import ru.mitriyf.jhider.updater.Updater;
 import ru.mitriyf.jhider.utils.actions.Action;
 import ru.mitriyf.jhider.utils.actions.ActionType;
 import ru.mitriyf.jhider.utils.colors.Colorizer;
 import ru.mitriyf.jhider.utils.colors.impl.LegacyColorizer;
 import ru.mitriyf.jhider.utils.colors.impl.MiniMessageColorizer;
-import ru.mitriyf.jhider.utils.worlds.World;
-import ru.mitriyf.jhider.utils.worlds.impl.BlackList;
-import ru.mitriyf.jhider.utils.worlds.impl.WhiteList;
-import ru.mitriyf.jhider.values.updater.Updater;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,27 +32,28 @@ import java.util.regex.Pattern;
 @Getter
 public class Values {
     private final JHider plugin;
-    private final Events events;
     private final Logger logger;
     private final Updater updater;
     private final File dataFolder;
     private final File configFile;
-    private final Pattern action_pattern = Pattern.compile("\\[(\\w+)] ?(.*)");
+    private final ListenerManager listenerManager;
     private final Map<String, List<Action>> help = new HashMap<>();
     private final Map<String, List<Action>> aJoin = new HashMap<>();
-    private final Map<String, List<Action>> aFirstJoin = new HashMap<>();
-    private final Map<String, List<Action>> aAchievement = new HashMap<>();
     private final Map<String, List<Action>> aQuit = new HashMap<>();
     private final Map<String, List<Action>> aDeath = new HashMap<>();
     private final Map<String, List<Action>> aRespawn = new HashMap<>();
+    private final Map<String, List<Action>> aFirstJoin = new HashMap<>();
     private final String[] lcs = new String[]{"de_DE", "en_US", "ru_RU"};
-    private boolean miniMessage, unknown, join, quit, death, fastDeath, placeholderAPI, jPirates, locale, mUnknown, mJoin, mQuit, mDeath, mRespawn, mAchievement;
+    private final Map<String, List<Action>> aAchievement = new HashMap<>();
+    private final Pattern action_pattern = Pattern.compile("\\[(\\w+)] ?(.*)");
+    private boolean messageUnknown, messageJoin, messageQuit, messageDeath, messageRespawn, messageAchievement;
+    private boolean miniMessage, unknown, join, quit, death, fastDeath, placeholderAPI, jPirates, locale;
     private boolean updaterEnabled = true, required = true, release = false;
+    private final Set<World> worldTypes = new HashSet<>();
     private ConfigurationSection settings;
     private FileConfiguration config;
-    private List<String> worlds;
     private Colorizer colorizer;
-    private World world;
+    private WorldsList worldsList;
 
     public Values(JHider plugin) {
         this.plugin = plugin;
@@ -65,7 +67,7 @@ public class Values {
         } catch (Exception e) {
             miniMessage = false;
         }
-        events = new Events(plugin, this);
+        listenerManager = new ListenerManager(plugin, this);
     }
 
     public void setup(boolean onlineUpdates) {
@@ -75,7 +77,7 @@ public class Values {
         clear();
         setupSettings();
         setupMessages();
-        events.setup();
+        listenerManager.setup();
     }
 
     private void setupSettings() {
@@ -90,22 +92,16 @@ public class Values {
         placeholderAPI = supports.getBoolean("placeholderAPI");
         jPirates = supports.getBoolean("jPirates");
         ConfigurationSection w = settings.getConfigurationSection("worlds");
-        String wType = w.getString("type").toLowerCase();
-        if (wType.equals("whitelist")) {
-            world = new WhiteList(plugin);
-        } else {
-            world = new BlackList(plugin);
-        }
-        worlds = w.getStringList("worlds");
+        setupSettingsWorlds(w);
         if (placeholderAPI && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
             plugin.getLogger().warning("The PlaceholderAPI was not detected. This feature will be disabled.");
             placeholderAPI = false;
         }
         ConfigurationSection command = settings.getConfigurationSection("command");
         unknown = command.getBoolean("unknown");
-        if (!unknown && events.getUnknownCommandEvent() != null | events.getUnknownPreCommandEvent() != null) {
-            HandlerList.unregisterAll(events.getUnknownCommandEvent());
-            HandlerList.unregisterAll(events.getUnknownPreCommandEvent());
+        if (!unknown && listenerManager.getUnknownCommandListener() != null | listenerManager.getUnknownPreCommandListener() != null) {
+            HandlerList.unregisterAll(listenerManager.getUnknownCommandListener());
+            HandlerList.unregisterAll(listenerManager.getUnknownPreCommandListener());
         }
         ConfigurationSection player = settings.getConfigurationSection("player");
         join = player.getBoolean("join");
@@ -114,27 +110,43 @@ public class Values {
         death = d.getBoolean("disabled");
         fastDeath = d.getBoolean("fast");
         ConfigurationSection messages = settings.getConfigurationSection("messages");
-        mAchievement = messages.getBoolean("achievement");
-        mUnknown = messages.getBoolean("unknown");
-        mJoin = messages.getBoolean("join");
-        mQuit = messages.getBoolean("quit");
-        mDeath = messages.getBoolean("death");
-        mRespawn = messages.getBoolean("respawn");
-        if (!join && !quit && !death && !mAchievement) {
-            if (events.getPlayerStatusEvents() != null) {
-                HandlerList.unregisterAll(events.getPlayerStatusEvents());
-                events.setPlayerStatusEvents(null);
+        messageAchievement = messages.getBoolean("achievement");
+        messageUnknown = messages.getBoolean("unknown");
+        messageJoin = messages.getBoolean("join");
+        messageQuit = messages.getBoolean("quit");
+        messageDeath = messages.getBoolean("death");
+        messageRespawn = messages.getBoolean("respawn");
+        if (!join && !quit && !death && !messageAchievement) {
+            if (listenerManager.getPlayerStatusListener() != null) {
+                HandlerList.unregisterAll(listenerManager.getPlayerStatusListener());
+                listenerManager.setPlayerStatusListener(null);
             }
         }
-        if (events.getPlayerStatusEvents() == null || (!jPirates && events.getJPiratesPassEvents() != null)) {
-            HandlerList.unregisterAll(events.getJPiratesPassEvents());
-            events.setJPiratesPassEvents(null);
+        if (listenerManager.getPlayerStatusListener() == null || (!jPirates && listenerManager.getJPiratesPassListener() != null)) {
+            HandlerList.unregisterAll(listenerManager.getJPiratesPassListener());
+            listenerManager.setJPiratesPassListener(null);
+        }
+    }
+
+    private void setupSettingsWorlds(ConfigurationSection worldsSection) {
+        worldsList = worldsSection.getString("type").equals("allowed") ? new AllowedWorlds(this) : new BlockedWorlds(this);
+        List<String> worldsList = worldsSection.getStringList("worlds");
+        for (String worldString : worldsList) {
+            if (worldString.isEmpty() || worldString.equals("no")) {
+                continue;
+            }
+            try {
+                World world = plugin.getServer().getWorld(worldString);
+                worldTypes.add(world);
+            } catch (Exception e) {
+                logger.info("The world plugin is not detected at startup " + worldString + " (world can load itself after a while): " + e);
+            }
         }
     }
 
     private void setupMessages() {
         setupLocales();
-        if (!mUnknown) {
+        if (!messageUnknown) {
             File file = plugin.getServer().getWorldContainer().getAbsoluteFile();
             YamlConfiguration spigot = YamlConfiguration.loadConfiguration(new File(file, "spigot.yml"));
             help.put("", getActionList(Collections.singletonList(colorizer.colorize(spigot.getString("messages.unknown-command")))));
@@ -166,7 +178,7 @@ public class Values {
         for (Map.Entry<String, FileConfiguration> entry : locales.entrySet()) {
             ConfigurationSection messages = entry.getValue().getConfigurationSection("messages");
             String name = entry.getKey();
-            if (mUnknown) {
+            if (messageUnknown) {
                 help.put(name, getActionList(messages.getStringList("unknown")));
             }
             aAchievement.put(name, getActionList(messages.getStringList("achievement")));

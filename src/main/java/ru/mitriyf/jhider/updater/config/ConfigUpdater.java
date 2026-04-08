@@ -1,4 +1,4 @@
-package ru.mitriyf.jhider.values.updater.config;
+package ru.mitriyf.jhider.updater.config;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.configuration.ConfigurationSection;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import ru.mitriyf.jhider.JHider;
-import ru.mitriyf.jhider.values.updater.config.builder.Builder;
+import ru.mitriyf.jhider.updater.config.builder.Builder;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
