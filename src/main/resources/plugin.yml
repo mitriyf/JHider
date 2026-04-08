@@ -3,7 +3,6 @@ version: '1.3'
 main: ru.mitriyf.jhider.JHider
 author: Mitriyf
 api-version: 1.13
-folia-supported: true
 softdepend: [ JPirates, PlaceholderAPI ]
 description: "The plugin configures spigot messages."
 commands:

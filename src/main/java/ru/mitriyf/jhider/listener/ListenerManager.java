@@ -9,6 +9,7 @@ import ru.mitriyf.jhider.listener.achievement.AdvancementDoneListener;
 import ru.mitriyf.jhider.listener.command.CommandListener;
 import ru.mitriyf.jhider.listener.pass.JPiratesPassListener;
 import ru.mitriyf.jhider.listener.status.PlayerStatusListener;
+import ru.mitriyf.jhider.listener.status.WorldStatusListener;
 import ru.mitriyf.jhider.listener.unknown.UnknownCommandListener;
 import ru.mitriyf.jhider.listener.unknown.UnknownPreCommandListener;
 import ru.mitriyf.jhider.values.Values;
@@ -18,6 +19,7 @@ public class ListenerManager {
     private final JHider plugin;
     private final Values values;
     private CommandListener commandListener;
+    private WorldStatusListener worldListener;
     private UnknownCommandListener unknownCommandListener;
     private AdvancementDoneListener advancementDoneListener;
     private UnknownPreCommandListener unknownPreCommandListener;
@@ -42,6 +44,10 @@ public class ListenerManager {
     }
 
     private void setupServerListeners(PluginManager manager) {
+        if (worldListener == null) {
+            worldListener = new WorldStatusListener(plugin);
+            manager.registerEvents(worldListener, plugin);
+        }
         if (commandListener == null) {
             commandListener = new CommandListener(plugin);
             manager.registerEvents(commandListener, plugin);
