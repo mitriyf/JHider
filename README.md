@@ -2,7 +2,7 @@
 ## 🌌 Hide or add more unique features to your server
 This plugin hides or adds first join, join, quit, death, unknown commands, and achievement messages.
 - $ Versions 1.7.1-26.1+ are supported.
-- $ Has been tested on versions: 1.7.10, 1.8.8, 1.12.2, 1.16.5, 1.18.2, 1.21, 26.1
+- $ Has been tested on versions: 1.7.10, 1.8.8, 1.12.2, 1.16.5, 1.18.2, 1.21, 26.1.
 - $ FAQ: [FAQ · mitriyf/JHider Wiki](https://github.com/mitriyf/JHider/wiki/FAQ)
 # 🛠️ Customize your messages
 You can improve messages for firstjoin, join, quit, death, respawn, unknown commands, and achievements.
