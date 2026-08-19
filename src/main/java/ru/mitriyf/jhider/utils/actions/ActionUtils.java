@@ -4,7 +4,6 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -78,9 +77,9 @@ public class ActionUtils {
                 return;
             }
             int later = spl.length == 7 ? utils.formatInt(spl[6]) : 0;
-            World w = Bukkit.getWorld(spl[0]);
+            World w = plugin.getServer().getWorld(spl[0]);
             if (w == null) {
-                w = Bukkit.getWorld("world");
+                w = plugin.getServer().getWorld("world");
             }
             double x = spl.length >= 2 ? utils.formatDouble(spl[1]) : 0;
             double y = spl.length >= 3 ? utils.formatDouble(spl[2]) : 80;

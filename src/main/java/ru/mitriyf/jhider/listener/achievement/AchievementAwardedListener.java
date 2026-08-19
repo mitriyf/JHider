@@ -2,6 +2,7 @@ package ru.mitriyf.jhider.listener.achievement;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import ru.mitriyf.jhider.JHider;
@@ -18,7 +19,7 @@ public class AchievementAwardedListener implements Listener {
         utils = plugin.getUtils();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerAchievementAwarded(PlayerAchievementAwardedEvent e) {
         Player player = e.getPlayer();
         if (values.getWorldsList().notContainsWorld(player.getWorld())) {

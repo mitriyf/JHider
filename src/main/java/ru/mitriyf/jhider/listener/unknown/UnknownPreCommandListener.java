@@ -1,6 +1,7 @@
 package ru.mitriyf.jhider.listener.unknown;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import ru.mitriyf.jhider.JHider;
@@ -18,7 +19,7 @@ public class UnknownPreCommandListener implements Listener {
         utils = plugin.getUtils();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
         if (values.getWorldsList().notContainsWorld(e.getPlayer().getWorld())) {
             return;

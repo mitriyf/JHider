@@ -2,6 +2,7 @@ package ru.mitriyf.jhider.listener.status;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,7 +26,7 @@ public class PlayerStatusListener implements Listener {
         utils = plugin.getUtils();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         boolean isJoin = values.isJoin();
@@ -45,7 +46,7 @@ public class PlayerStatusListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         boolean isQuit = values.isQuit();
@@ -61,7 +62,7 @@ public class PlayerStatusListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player entity = e.getEntity();
         boolean isDeath = values.isDeath();
@@ -81,7 +82,7 @@ public class PlayerStatusListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
         if (!values.isMessageRespawn() || values.getWorldsList().notContainsWorld(player.getWorld())) {
