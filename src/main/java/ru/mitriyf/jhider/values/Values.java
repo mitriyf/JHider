@@ -1,8 +1,6 @@
 package ru.mitriyf.jhider.values;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -93,8 +91,8 @@ public class Values {
         jPirates = supports.getBoolean("jPirates");
         ConfigurationSection w = settings.getConfigurationSection("worlds");
         setupSettingsWorlds(w);
-        if (placeholderAPI && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            plugin.getLogger().warning("The PlaceholderAPI was not detected. This feature will be disabled.");
+        if (placeholderAPI && plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            logger.warning("The PlaceholderAPI was not detected. This feature will be disabled.");
             placeholderAPI = false;
         }
         ConfigurationSection command = settings.getConfigurationSection("command");
@@ -137,7 +135,9 @@ public class Values {
             }
             try {
                 World world = plugin.getServer().getWorld(worldString);
-                worldList.add(world);
+                if (world != null) {
+                    worldList.add(world);
+                }
             } catch (Exception e) {
                 logger.info("The world plugin is not detected at startup " + worldString + ": " + e);
             }
@@ -165,7 +165,7 @@ public class Values {
             }
             File[] dir = file.listFiles();
             if (dir == null) {
-                plugin.getLogger().warning("Locales are empty.");
+                logger.warning("Locales are empty.");
             } else {
                 for (File f : dir) {
                     if (f.isFile()) {
@@ -263,18 +263,22 @@ public class Values {
     }
 
     private List<Action> getActionList(List<String> actionStrings) {
-        ImmutableList.Builder<Action> actionListBuilder = ImmutableList.builder();
+        List<Action> actionListBuilder = new ArrayList<>();
         for (String actionString : actionStrings) {
             actionListBuilder.add(fromString(actionString));
         }
-        return actionListBuilder.build();
+        return Collections.unmodifiableList(actionListBuilder);
     }
 
     private void clear() {
-        for (Map<String, List<Action>> map : Arrays.asList(help, aJoin, aQuit, aDeath, aRespawn, aFirstJoin, aAchievement)) {
-            map.clear();
-        }
+        help.clear();
+        aJoin.clear();
+        aQuit.clear();
+        aDeath.clear();
+        aRespawn.clear();
         worldList.clear();
+        aFirstJoin.clear();
+        aAchievement.clear();
     }
 
     public void delete(File f) {

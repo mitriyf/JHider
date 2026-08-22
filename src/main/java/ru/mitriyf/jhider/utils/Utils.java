@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import ru.mitriyf.jhider.JHider;
 import ru.mitriyf.jhider.utils.actions.Action;
@@ -20,8 +21,6 @@ import ru.mitriyf.jhider.values.Values;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 @Getter
@@ -29,7 +28,6 @@ public class Utils {
     private final Values values;
     private final Logger logger;
     private final JHider plugin;
-    private final CountDownLatch latch;
     private final CommonUtils commonUtils;
     private final ActionUtils actionUtils;
     private final BukkitScheduler scheduler;
@@ -41,7 +39,6 @@ public class Utils {
         this.plugin = plugin;
         values = plugin.getValues();
         logger = plugin.getLogger();
-        latch = new CountDownLatch(1);
         scheduler = plugin.getServer().getScheduler();
         actionUtils = new ActionUtils(this, plugin);
         commonUtils = new CommonUtils(this, plugin);
@@ -71,18 +68,43 @@ public class Utils {
     }
 
     public void sendMessage(CommandSender sender, Map<String, List<Action>> actions) {
-        scheduler.runTaskAsynchronously(plugin, () -> {
-            if (sender instanceof Player) {
-                Player p = (Player) sender;
-                for (Action action : actions.getOrDefault(locale.player(p), actions.get(""))) {
-                    sendPlayer(p, action);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                List<Action> actionList;
+                boolean isPlayer;
+                if (sender instanceof Player) {
+                    actionList = actions.getOrDefault(locale.player((Player) sender), actions.get(""));
+                    isPlayer = true;
+                } else {
+                    actionList = actions.get("");
+                    isPlayer = false;
                 }
-                return;
+                int delayTicks = 0;
+                for (Action action : actionList) {
+                    if (action.getType() == ActionType.DELAY) {
+                        try {
+                            delayTicks += formatInt(action.getContext());
+                        } catch (Exception ignored) {
+                        }
+                        continue;
+                    }
+                    if (delayTicks > 0) {
+                        plugin.getServer().getScheduler().runTaskLater(plugin, () -> sendMessage(sender, action, isPlayer), delayTicks);
+                    } else {
+                        sendMessage(sender, action, isPlayer);
+                    }
+                }
             }
-            for (Action action : actions.get("")) {
-                sendSender(sender, action);
-            }
-        });
+        }.runTask(plugin);
+    }
+
+    private void sendMessage(CommandSender sender, Action action, boolean isPlayer) {
+        if (isPlayer) {
+            sendPlayer((Player) sender, action);
+        } else {
+            sendSender(sender, action);
+        }
     }
 
     private void sendPlayer(Player p, Action action) {
@@ -140,15 +162,6 @@ public class Utils {
                 log(context);
                 break;
             }
-            case DELAY: {
-                try {
-                    if (latch.await(Integer.parseInt(context) * 50L, TimeUnit.MILLISECONDS)) {
-                        break;
-                    }
-                } catch (Exception ignored) {
-                }
-                break;
-            }
             default: {
                 sendMessage(p, context);
                 break;
@@ -170,15 +183,6 @@ public class Utils {
             }
             case LOG: {
                 log(context);
-                break;
-            }
-            case DELAY: {
-                try {
-                    if (latch.await(Integer.parseInt(context) * 50L, TimeUnit.MILLISECONDS)) {
-                        break;
-                    }
-                } catch (Exception ignored) {
-                }
                 break;
             }
             case PLAYER:
