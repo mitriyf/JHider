@@ -11,6 +11,10 @@ import ru.mitriyf.jhider.filter.world.WorldsList;
 import ru.mitriyf.jhider.filter.world.impl.AllowedWorlds;
 import ru.mitriyf.jhider.filter.world.impl.BlockedWorlds;
 import ru.mitriyf.jhider.listener.ListenerManager;
+import ru.mitriyf.jhider.listener.pass.JPiratesPassListener;
+import ru.mitriyf.jhider.listener.status.PlayerStatusListener;
+import ru.mitriyf.jhider.listener.unknown.UnknownCommandListener;
+import ru.mitriyf.jhider.listener.unknown.UnknownPreCommandListener;
 import ru.mitriyf.jhider.updater.Updater;
 import ru.mitriyf.jhider.utils.actions.Action;
 import ru.mitriyf.jhider.utils.actions.ActionType;
@@ -97,9 +101,15 @@ public class Values {
         }
         ConfigurationSection command = settings.getConfigurationSection("command");
         unknown = command.getBoolean("unknown");
-        if (!unknown && listenerManager.getUnknownCommandListener() != null | listenerManager.getUnknownPreCommandListener() != null) {
-            HandlerList.unregisterAll(listenerManager.getUnknownCommandListener());
-            HandlerList.unregisterAll(listenerManager.getUnknownPreCommandListener());
+        if (!unknown) {
+            UnknownCommandListener unknownCommandListener = listenerManager.getUnknownCommandListener();
+            if (unknownCommandListener != null) {
+                HandlerList.unregisterAll(unknownCommandListener);
+            }
+            UnknownPreCommandListener unknownPreCommandListener = listenerManager.getUnknownPreCommandListener();
+            if (unknownPreCommandListener != null) {
+                HandlerList.unregisterAll(unknownPreCommandListener);
+            }
         }
         ConfigurationSection player = settings.getConfigurationSection("player");
         join = player.getBoolean("join");
@@ -114,14 +124,16 @@ public class Values {
         messageQuit = messages.getBoolean("quit");
         messageDeath = messages.getBoolean("death");
         messageRespawn = messages.getBoolean("respawn");
-        if (!join && !quit && !death && !messageAchievement) {
-            if (listenerManager.getPlayerStatusListener() != null) {
-                HandlerList.unregisterAll(listenerManager.getPlayerStatusListener());
+        PlayerStatusListener playerStatusListener = listenerManager.getPlayerStatusListener();
+        if (!join && !quit && !death && !messageQuit && !messageRespawn && !messageJoin && !messageDeath) {
+            if (playerStatusListener != null) {
+                HandlerList.unregisterAll(playerStatusListener);
                 listenerManager.setPlayerStatusListener(null);
             }
         }
-        if (listenerManager.getPlayerStatusListener() == null || (!jPirates && listenerManager.getJPiratesPassListener() != null)) {
-            HandlerList.unregisterAll(listenerManager.getJPiratesPassListener());
+        JPiratesPassListener jPiratesPassListener = listenerManager.getJPiratesPassListener();
+        if (playerStatusListener == null || (!jPirates && jPiratesPassListener != null)) {
+            HandlerList.unregisterAll(jPiratesPassListener);
             listenerManager.setJPiratesPassListener(null);
         }
     }

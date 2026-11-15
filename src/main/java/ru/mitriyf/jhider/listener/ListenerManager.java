@@ -55,7 +55,7 @@ public class ListenerManager {
     }
 
     private void setupBaseListeners(PluginManager manager) {
-        if (values.isJoin() | values.isQuit() | values.isDeath() | values.isMessageRespawn()) {
+        if (values.isJoin() | values.isQuit() | values.isDeath() | values.isMessageRespawn() | values.isMessageJoin() | values.isMessageDeath() | values.isMessageQuit()) {
             if (playerStatusListener == null) {
                 playerStatusListener = new PlayerStatusListener(plugin);
                 manager.registerEvents(playerStatusListener, plugin);
